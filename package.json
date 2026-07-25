@@ -1,0 +1,21 @@
+{
+  "name": "crypto-web3",
+  "version": "1.0.0",
+  "description": "Smart contracts em Solidity com Hardhat e Ethers.js",
+  "author": "bruno1186",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.1",
+    "hardhat": "^2.22.6",
+    "typescript": "^5.5.3"
+  }
+}
