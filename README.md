@@ -1,69 +1,67 @@
 # crypto-web3
 
-Projeto Web3 de referencia com smart contracts em Solidity, ambiente de desenvolvimento Hardhat e um dApp de exemplo integrado via Ethers.js. Segue as principais praticas de mercado para desenvolvimento blockchain.
+[![CI](https://github.com/bruno1186/crypto-web3/actions/workflows/ci.yml/badge.svg)](https://github.com/bruno1186/crypto-web3/actions/workflows/ci.yml)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636)
+![Hardhat](https://img.shields.io/badge/Hardhat-2.x-fff100)
+
+Projeto Web3 de referência com smart contracts em Solidity, ambiente de desenvolvimento Hardhat e um dApp de exemplo integrado via ethers.js. Segue as principais práticas de mercado para desenvolvimento blockchain, incluindo testes automatizados e CI.
 
 ## Tecnologias
 
-- Solidity
-- - Hardhat (compilacao, testes e deploy)
-  - - Ethers.js
-    - - OpenZeppelin Contracts (padroes ERC-20, ERC-721)
-      - - TypeChain (tipagem para contratos)
-        - - Chai / Mocha para testes de contrato
-          - - React + Vite + wagmi para o dApp
-            - - TypeScript
-             
-              - ## Estrutura de pastas
-             
-              - ```
-                crypto-web3/
-                  contracts/        # smart contracts em Solidity
-                  scripts/          # scripts de deploy
-                  test/             # testes dos contratos
-                  frontend/         # dApp (React + wagmi)
-                  hardhat.config.ts
-                  package.json
-                ```
+- **Solidity** (0.8.24) com **OpenZeppelin Contracts** (ERC-20, SafeERC20, ReentrancyGuard)
+- **Hardhat** — compilação, testes e deploy
+- **ethers.js v6** — integração do dApp com a blockchain
+- **Chai / Mocha** — testes de contrato
+- **React + Vite** — dApp de exemplo
 
-                ## Como rodar localmente
+## Contratos
 
-                ```bash
-                # instalar dependencias
-                npm install
+- **Token.sol** — token ERC-20 (`CW3`) com mint restrito ao owner.
+- **Vault.sol** — cofre de depósito/saque de um token ERC-20, com `SafeERC20`, `ReentrancyGuard`, custom errors e eventos, seguindo checks-effects-interactions.
 
-                # compilar contratos
-                npx hardhat compile
+## Estrutura de pastas
 
-                # rodar testes
-                npx hardhat test
+```
+crypto-web3/
+├── contracts/        # smart contracts em Solidity (Token, Vault)
+├── scripts/          # scripts de deploy
+├── test/             # testes dos contratos (Token, Vault)
+├── frontend/         # dApp (React + Vite + ethers.js)
+├── hardhat.config.ts
+└── package.json
+```
 
-                # subir node local
-                npx hardhat node
+## Como rodar os contratos
 
-                # deploy na rede local
-                npx hardhat run scripts/deploy.ts --network localhost
-                ```
+```bash
+npm install
+npx hardhat compile        # compila os contratos
+npx hardhat test           # executa os testes
+npx hardhat node           # sobe uma blockchain local
+npx hardhat run scripts/deploy.ts --network localhost   # deploy local
+```
 
-                ## dApp
+## dApp (frontend)
 
-                ```bash
-                cd frontend
-                npm install
-                npm run dev
-                ```
+O dApp permite conectar a carteira (MetaMask), consultar saldos e depositar/sacar tokens no contrato Vault.
 
-                ## Seguranca
+```bash
+cd frontend
+npm install
+cp .env.example .env       # preencha os enderecos exibidos no deploy
+npm run dev                # abre em http://localhost:5173
+```
 
-                Este repositorio e para fins de estudo e referencia. Nunca faca commit de chaves privadas ou seeds. Use variaveis de ambiente (.env) e mantenha o arquivo no .gitignore.
+Os endereços dos contratos são lidos de `VITE_TOKEN_ADDRESS` e `VITE_VAULT_ADDRESS` (veja `frontend/.env.example`), com fallback para os endereços padrão de deploy local do Hardhat.
 
-                ## Scripts principais
+## Segurança
 
-                - `npx hardhat compile` - compila os contratos
-                - - `npx hardhat test` - executa os testes
-                  - - `npx hardhat node` - inicia blockchain local
-                    - - `npm run lint` - analise estatica
-                     
-                      - ## Licenca
-                     
-                      - MIT
-                      - 
+Repositório para fins de estudo e referência. **Nunca** faça commit de chaves privadas ou seeds — use variáveis de ambiente (`.env`) mantidas no `.gitignore`.
+
+## CI
+
+O workflow em `.github/workflows/ci.yml` instala as dependências, compila os contratos e roda os testes a cada push e pull request.
+
+## Licença
+
+MIT
